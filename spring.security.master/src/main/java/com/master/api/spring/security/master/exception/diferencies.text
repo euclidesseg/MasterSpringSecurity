@@ -1,0 +1,14 @@
+# ObjectNotFoundException:
+... Esta clase es una excepción personalizada que extiende de RuntimeException. Se utiliza para representar el caso en el que un objeto específico 
+... no se encuentra en la base de datos u otro contexto.
+... Se lanza explícitamente en los métodos cuando se detecta que un objeto no existe.
+... Su propósito es indicar un error específico de "objeto no encontrado", que puede ser útil para los clientes de la API para manejar casos en 
+... los que se solicita un objeto que no está presente.
+
+
+# GlobalExceptionHandler:
+... Esta clase es un controlador de excepciones global. Utiliza la anotación @RestControllerAdvice para manejar excepciones lanzadas desde cualquier controlador REST en la aplicación.
+... Define métodos anotados con @ExceptionHandler para manejar diferentes tipos de excepciones.
+... Su propósito es centralizar el manejo de excepciones y proporcionar respuestas adecuadas a los clientes de la API para diversos tipos de errores.
+... No necesita ser llamado explícitamente en un método en particular. Spring Boot lo detectará y lo utilizará automáticamente para manejar excepciones 
+... desde controladores REST en toda la aplicación

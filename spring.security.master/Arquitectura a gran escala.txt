@@ -1,0 +1,60 @@
+=== Arquitectura a gran escala 
+ Spring security se debe incorporar a lo siclos de vida de jakarta y lo hace a traves del metodo
+# DelegationFilterProxy
+ ** Es un filtro del paquete Jakarta.servelets se encarga de hacer un puente entre el siclo de vida de springboot y el siclo de vida 
+ ** del contendeor de servlets de jakarta para que los filtros de seguridad accedan a los recursos de spring y de jakarta
+ ** Una vez se injecta en la cadena de filtros de jakarta le delega el trabajo al FilterchainProxi
+ # FilterCahainProxi
+ ** Cordina la cadena de filtros para la seguridad en spring security basada en peticiones get put o delete
+ ** indica que filtros se deben ejecutar y en que orden
+ ** puede administrar una cadena de filtros o más cadenas de filtro
+
+ # SeuciryFilterChain
+ ** Es una cadena de filtros, basicamente es una estructura de datos que contiene filtros de seguridad
+ ** esta cadena es cordinada por el objeto de arriba
+
+
+! De estos tres componentes el unico que creamos es el SecurityFilterchain
+
+
+# SecurityContextHolder 
+** Es una Clase fundamental en spring security quye proporciona una acceso centralizado al contexto de seguridad de una aplicacion
+** permite acceder y gestionar la información de autenticacion y aurorizacion asociada con uns solicitud HTTP en el contexto de 
+** Seguridad actual
+
+# SecurityContext
+** Es una interfaz en spring security que representa el contexto de seguridad actual de  una solicitud
+** Contiene toda la informacion relacionada con la autenticacion y autorizacion del usuario que ha realizado la solicitud
+
+# Principal
+** Es una representacion del usuario autenticado en el sistema, representa la identidad del usuario
+** Este objeto encapsula los detalles del usuario como su nombre roles y otra informacion relacionada con la autenticación
+
+# GrantedAutority (Premiso Concedido)
+** Es un permiso que es otorgado al principal( Usuario Logueado) lectura, escritura, eliminacion, actualizacion sobre una entidad en especifico
+
+# AuthenticationManager y AutenticationConfiguration
+** Es una interfaz clave en el marco de Spring Security que  se utiliza para autenticar a los usuarios en una aplicación 
+** Es el componente central responsable de coordinar y administrar el proceso de autenticación
+** Solo contiene un unico metodo authenticate 
+... AutenticationConfiguration
+** Nos ayuda a tunear o hacer una creacion mas especifica de authenticationManager, rara vez se utiliza
+
+# ProviderManager 
+** Es la implementacion mas comun de la interfaz AuthenticationManager, es el componente sentral responsable de la autenticacion y delegar
+** la responsabilidad de autenticacion a los proveedores adecuados, 
+** actua como administrador de proveedores de autenticacion delega la responsavilidad porque pueden 
+** a ver muchas estrategias de login que puede ser con usuario y contraseña o con facebook google entre otros
+
+# AuhenticatorProvider (estrategias de autenticacion)
+** Es una interfaz que define el contrato para un proveedor de autenticación 
+** es una pirza clave del mecanismo de autenticacion en espring security ya que permite personalizar como se autentica a los usuarios en el sistema
+** Son las estrategias que el provider manager va a utilizar segun el tipo de autenticacion que haré
+
+#UserDetailService
+** Es una interfaz que se usa para cargar los detalles de un usuario especifico como nombre contraseña roles, 
+** desde una fuente de datos
+
+# PassWordEncoder
+** Es una interfaz que se usa para codificar y verficar las contraseas, su proposito principal es proteger
+** las contraseñas de los usuarios.

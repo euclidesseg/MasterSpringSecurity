@@ -1,0 +1,43 @@
+
+
+
+! DEPENDENCIAS NECESARIAS PRA TRABAJAR CON JWT EN JAVA
+
+**
+**<dependency>
+**    <groupId>org.springframework.boot</groupId>
+**    <artifactId>spring-boot-starter-security</artifactId>
+**</dependency>
+? // Este starter de Spring Boot proporciona configuraciones y dependencias para agregar seguridad a una aplicación Spring Boot. 
+? Incluye funcionalidades como autenticación, autorización, cifrado, entre otros.
+**
+** <dependency>
+**     <groupId>io.jsonwebtoken</groupId>
+**     <artifactId>jjwt-api</artifactId>
+**     <version>0.12.5</version>
+** </dependency>
+? Estea es la api para usar jwt en una aplicacion de spring security
+? Esta dependencia agrega la biblioteca Java JWT (JSON Web Token) a la aplicación. Permite trabajar con tokens JWT para autenticación
+
+**<dependency>
+**    <groupId>io.jsonwebtoken</groupId>
+**    <artifactId>jjwt-impl</artifactId>
+**    <version>0.12.5</version>
+**    <scope>runtime</scope>
+**</dependency>
+? Es la implementación de la api de JWT 
+**<dependency>
+**    <groupId>io.jsonwebtoken</groupId>
+**    <artifactId>jjwt-jackson</artifactId>
+**    <version>0.12.5</version>
+**    <scope>runtime</scope>
+**</dependency>
+? Para serializar y deserializar json a objetos java
+**<dependency>
+**    <groupId>org.springframework.security</groupId>
+**    <artifactId>spring-security-test</artifactId>
+**    <scope>test</scope>
+**</dependency>
+? // Esta dependencia proporciona utilidades de prueba para aplicaciones que utilizan Spring Security.
+? Ayuda a escribir pruebas de integración y unidad para la seguridad de Spring.
+
