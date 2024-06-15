@@ -1,4 +1,4 @@
-package com.master.api.spring.security.master.persistance.entity;
+package com.master.api.spring.security.master.persistance.entity.Security;
 
 import java.util.Collection;
 import java.util.List;
@@ -7,8 +7,7 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
-import com.master.api.spring.security.master.util.Role;
-
+import java.util.stream.Collector;
 import java.util.stream.Collectors;
 
 import jakarta.persistence.Column;
@@ -18,6 +17,8 @@ import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 
 @Entity
@@ -34,7 +35,9 @@ public class User implements UserDetails {
     private String name;
     private boolean enabled = true;
     
-    @Enumerated(EnumType.STRING)
+    // @Enumerated(EnumType.STRING)
+    @ManyToOne // relacion de muchos a uno con rol, un solo le pertenecerá a muchos usuarios
+    @JoinColumn(name = "role_id") // nombre de la llave foranea, la clave primaria de uno pasar a ser foranea de muchos
     private Role role;
 
     public Long getId() {
@@ -82,30 +85,16 @@ public class User implements UserDetails {
     public Collection<? extends GrantedAuthority> getAuthorities() { //== permisos concedidos
         if(role == null) return null;
         if (role.getPermissions() == null) return null;
-        
-            // return this.role.getPermissions().stream().map(permissions ->{ para authoriries 
-            List<SimpleGrantedAuthority> authoritiList =  this.role.getPermissions().stream().map(permissions ->{ 
-                String permision = permissions.name(); // obtengo un permiso segun el indice del arreglo permissions que es en formato string 
-                // return new SimpleGrantedAuthority(permision);
-                return new SimpleGrantedAuthority(permision);
-            }).collect(Collectors.toList());// #estamos recolectando todos los SimpleGrantedAuthority generados en un List 
-           authoritiList.add(new SimpleGrantedAuthority("ROLE_"+this.role.name()));
+
+        List<SimpleGrantedAuthority> authoritiList = this.role.getPermissions().stream()
+            .map(permission -> permission.getOperation().getName())
+            .map( permision -> new SimpleGrantedAuthority(permision)).collect(Collectors.toList());
+
+            authoritiList.add(new SimpleGrantedAuthority("ROLE_"+this.role.getName()));
             return authoritiList;
-        // return this.role.getPermissions().stream()
-        //     .map(permissions -> permissions.name())
-        //     .map(permision -> new SimpleGrantedAuthority(permision))//# obtengo un permiso segun el indice del arreglo permissions que es en formato string 
-        //     .collect(Collectors.toList());// #estamos recolectando todos los SimpleGrantedAuthority generados en un List 
-        
-
-
-        // Set<SimpleGrantedAuthority> authorities = new HashSet<>();
-
-        // this.role.getPermissions().forEach((rolePermission)-> {
-        //     String permission = rolePermission.name();
-        //     authorities.add(new SimpleGrantedAuthority(permission));
-        // });
-        // return authorities;
     }
+
+    
     @Override
     public boolean isAccountNonExpired() {
       return true;

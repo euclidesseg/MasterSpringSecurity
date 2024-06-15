@@ -18,7 +18,7 @@ import org.springframework.security.web.access.AccessDeniedHandler;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 import com.master.api.spring.security.master.config_security.filter.JwtAuthenticationFilter;
-import com.master.api.spring.security.master.util.Role;
+import com.master.api.spring.security.master.util.RoleEnum;
 // * esta clase me premite especificar la configuracion para permitir el acceso a las
 // * distintas areas de la aplicacion como lo son servicios repositorios o
 // * controladores
@@ -73,42 +73,42 @@ public class HttpSecurityConfig { // esta es una cadena de filtros
 		
 		/*autorizacion paa endpoints de productos  */
 		authReqConfig.requestMatchers(HttpMethod.GET, "/products")
-		.hasAnyRole(Role.ADMIN.name(), Role.ASSISTANT_ADIM.name());
+		.hasAnyRole(RoleEnum.ADMIN.name(), RoleEnum.ASSISTANT_ADIM.name());
 		// .hasAnyAuthority(RolPermission.READ_ALL_PRODUCTS.name());
 		authReqConfig.requestMatchers(HttpMethod.GET, "/products/{productId}")
-		.hasAnyRole(Role.ADMIN.name(), Role.ASSISTANT_ADIM.name());
+		.hasAnyRole(RoleEnum.ADMIN.name(), RoleEnum.ASSISTANT_ADIM.name());
 		// .hasAnyAuthority(RolPermission.READ_ONE_PRODUCT.name());
 		authReqConfig.requestMatchers(HttpMethod.POST, "/products/")
-		.hasAnyRole(Role.ADMIN.name());
+		.hasAnyRole(RoleEnum.ADMIN.name());
 		// .hasAnyAuthority(RolPermission.CREATE_ONE_PRODUCT.name());
 		authReqConfig.requestMatchers(HttpMethod.PUT, "/products/{productId}")
-		.hasAnyRole(Role.ADMIN.name(), Role.ASSISTANT_ADIM.name());
+		.hasAnyRole(RoleEnum.ADMIN.name(), RoleEnum.ASSISTANT_ADIM.name());
 		// .hasAnyAuthority(RolPermission.UPDATE_ONE_PRODUCT.name());
 		authReqConfig.requestMatchers(HttpMethod.PUT, "/products/{productId}/disabled")
-		.hasAnyRole(Role.ADMIN.name());
+		.hasAnyRole(RoleEnum.ADMIN.name());
 		// .hasAnyAuthority(RolPermission.DISABLE_ONE_PRODUCT.name());
 
 		/*autorizacion paa endpoints de categories */
 		authReqConfig.requestMatchers(HttpMethod.GET, "/categories")
-		.hasAnyRole(Role.ADMIN.name(), Role.ASSISTANT_ADIM.name());
+		.hasAnyRole(RoleEnum.ADMIN.name(), RoleEnum.ASSISTANT_ADIM.name());
 		// .hasAnyAuthority(RolPermission.READ_ALL_CATEGORYS.name());
 		authReqConfig.requestMatchers(HttpMethod.GET, "/categories{categoryId}")
-		.hasAnyRole(Role.ADMIN.name(), Role.ASSISTANT_ADIM.name());
+		.hasAnyRole(RoleEnum.ADMIN.name(), RoleEnum.ASSISTANT_ADIM.name());
 		// .hasAnyAuthority(RolPermission.READ_ONE_CATEGORY.name());
 		authReqConfig.requestMatchers(HttpMethod.POST, "/categories")
-		.hasAnyRole(Role.ADMIN.name());
+		.hasAnyRole(RoleEnum.ADMIN.name());
 		// .hasAnyAuthority(RolPermission.CREATE_ONE_CATEGORY.name());
 		authReqConfig.requestMatchers(HttpMethod.PUT, "/categories{categoryID}")
-		.hasAnyRole(Role.ADMIN.name(), Role.ASSISTANT_ADIM.name());
+		.hasAnyRole(RoleEnum.ADMIN.name(), RoleEnum.ASSISTANT_ADIM.name());
 		// .hasAnyAuthority(RolPermission.UPDATE_ONE_CATEGORY.name());
 		authReqConfig.requestMatchers(HttpMethod.PUT, "/categories{categoryId}/disabled")
-		.hasAnyRole(Role.ADMIN.name());
+		.hasAnyRole(RoleEnum.ADMIN.name());
 		// .hasAnyAuthority(RolPermission.DISABLE_ONE_CATEGORY.name());
 	
 		
 		/*Autorizacion para el endpoint de leer mi perfil */
 		authReqConfig.requestMatchers(HttpMethod.PUT, "/auth/profile")
-		.hasAnyRole(Role.ADMIN.name(), Role.ASSISTANT_ADIM.name(),Role.CUSTOMER.name());
+		.hasAnyRole(RoleEnum.ADMIN.name(), RoleEnum.ASSISTANT_ADIM.name(),RoleEnum.CUSTOMER.name());
 		// .hasAnyAuthority(RolPermission.READ_MY_PROFILE.name());
 
 		/*Authorization de enpoints publicos */

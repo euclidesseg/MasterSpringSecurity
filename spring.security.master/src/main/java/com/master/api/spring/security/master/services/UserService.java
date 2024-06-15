@@ -8,10 +8,11 @@ import org.springframework.stereotype.Service;
 
 import com.master.api.spring.security.master.dto.SaveUser;
 import com.master.api.spring.security.master.exception.InvalidPasswordException;
+import com.master.api.spring.security.master.exception.ObjectNotFoundException;
 import com.master.api.spring.security.master.interfaces.IUserService;
-import com.master.api.spring.security.master.persistance.entity.User;
+import com.master.api.spring.security.master.persistance.entity.Security.Role;
+import com.master.api.spring.security.master.persistance.entity.Security.User;
 import com.master.api.spring.security.master.persistance.repository.IUserRepository;
-import com.master.api.spring.security.master.util.Role;
 
 @Service
 public class UserService implements IUserService {
@@ -21,6 +22,9 @@ public class UserService implements IUserService {
 
     @Autowired
     private PasswordEncoder passwordEncoder;
+
+    @Autowired
+    RoleService roleService;
 
     @Override
     public User createOneCustomer(SaveUser newUser) {
@@ -33,7 +37,11 @@ public class UserService implements IUserService {
         user.setPassword(passwordEncoder.encode(newUser.getPassword()));
         user.setUsername(newUser.getUsername());
         user.setName(newUser.getName());
-        user.setRole(Role.CUSTOMER);
+
+
+
+        Role roleDefault = roleService.findDefaultRole().orElseThrow(() -> new ObjectNotFoundException("Role Not found whit Eole"));
+        user.setRole(roleDefault);
         user.setEnabled(true);
         // if (newUser.getPassword().equals("marianito")) {
             //     user.setRole(Role.CUSTOMER);

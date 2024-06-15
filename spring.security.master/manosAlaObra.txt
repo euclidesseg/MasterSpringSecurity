@@ -69,3 +69,12 @@ la Authorizacion = A que tengo permisos
 ===
 ===
 ===
+
+
+... METODOS DE AUTHORIZACION PERSONALIZADOS
+**  Hasta el momento los hemos usado methodos de authorizacion directamente especificados por spring security, ahora 
+**  ahora vamos a estar creando una implementacion propia de un authorization manager para crear un proceso de authorizacion basado 100% en bases de datos
+**  es decir, nos vamos a conectar a una base de datos que tanga las tablas de authorizacion y clientes y relacionamos los roles con las operaciones
+
+** Primero paso es desasernos de los Role Util y Permision Util para pasarlos a una tabla en nuestra base de datos Cmbiamos esos nombres
+** Luego crear nuestro esquema de 5 tablas para manerjar la autenticación

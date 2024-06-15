@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.master.api.spring.security.master.dto.auth.AuthenticationRequest;
 import com.master.api.spring.security.master.dto.auth.AuthenticationResponse;
-import com.master.api.spring.security.master.persistance.entity.User;
+import com.master.api.spring.security.master.persistance.entity.Security.User;
 import com.master.api.spring.security.master.services.Auth.AuthenticationService;
 
 import jakarta.validation.Valid;

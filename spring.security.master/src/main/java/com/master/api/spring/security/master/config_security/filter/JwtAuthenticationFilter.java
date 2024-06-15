@@ -10,7 +10,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 import org.springframework.web.filter.OncePerRequestFilter;
 
-import com.master.api.spring.security.master.persistance.entity.User;
+import com.master.api.spring.security.master.persistance.entity.Security.User;
 import com.master.api.spring.security.master.services.UserDetailService;
 import com.master.api.spring.security.master.services.UserService;
 import com.master.api.spring.security.master.services.Auth.JwtService;
