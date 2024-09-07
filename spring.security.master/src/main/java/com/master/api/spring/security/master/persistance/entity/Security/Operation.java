@@ -18,8 +18,8 @@ public class Operation {
 
     private String name;
     private String path; //       /product
-    private String htttpMethod;
-    private boolean permiteAll;
+    private String http_method;
+    private boolean permit_all;
 
 
     @ManyToOne
@@ -58,33 +58,34 @@ public class Operation {
     }
 
 
-    public String getHtttpMethod() {
-        return htttpMethod;
-    }
-
-
-    public void setHtttpMethod(String htttpMethod) {
-        this.htttpMethod = htttpMethod;
-    }
-
-
-    public boolean isPermiteAll() {
-        return permiteAll;
-    }
-
-
-    public void setPermiteAll(boolean permiteAll) {
-        this.permiteAll = permiteAll;
-    }
-
 
     public Module getModule() {
         return module;
     }
 
 
+    public boolean isPermit_all() {
+        return permit_all;
+    }
+
+
+    public void setPermit_all(boolean permit_all) {
+        this.permit_all = permit_all;
+    }
+
+
     public void setModule(Module module) {
         this.module = module;
+    }
+
+
+    public String getHttp_method() {
+        return http_method;
+    }
+
+
+    public void setHttp_method(String http_method) {
+        this.http_method = http_method;
     }
 
     //=== los paths dependen de cada modulo como 

@@ -4,6 +4,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationProvider;
+import org.springframework.security.authorization.AuthorizationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -15,6 +16,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.access.AccessDeniedHandler;
+import org.springframework.security.web.access.intercept.RequestAuthorizationContext;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 import com.master.api.spring.security.master.config_security.filter.JwtAuthenticationFilter;
@@ -47,6 +49,12 @@ public class HttpSecurityConfig { // esta es una cadena de filtros
 	private AuthenticationEntryPoint authenticationEntryPoint;
 	@Autowired
 	private AccessDeniedHandler accessDeniedHandler;
+
+
+
+	// Interfaz generica debemos indicar que tipo de datos va a envolver, RequestAuthorizationContext es un dto que dentro tiene el HttpServletRequest
+	@Autowired
+	private AuthorizationManager<RequestAuthorizationContext> myAuthorizationManager;
 	
     //== este metodo permite personalizar  como se van a gestionar y proteger las solicitudes http
 	@Bean
@@ -59,7 +67,8 @@ public class HttpSecurityConfig { // esta es una cadena de filtros
 			//== se encarga de inyectar los beans necesarios automáticamente. Al referenciar authenticationProvider(this.authenticationProvider),
 			//== Spring Security buscará un bean de tipo AuthenticationProvider en el contexto de la aplicación y lo utilizará para la autenticación
 			.addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
-			.authorizeHttpRequests(authReqConfig -> buildRequestMatchers(authReqConfig))
+			// .authorizeHttpRequests(authReqConfig -> buildRequestMatchers(authReqConfig)) sina AuthorizationManager personalizado desde base de datos
+			.authorizeHttpRequests(authReqConfig -> authReqConfig.anyRequest().access(myAuthorizationManager)) // con AuthorizationManager personalizado desde base de datos con acces sobreescribo el AuthorityAuthorizationManager por defecto de spring security
 			.exceptionHandling(exceptionConfig -> exceptionConfig.authenticationEntryPoint(authenticationEntryPoint))
 			.exceptionHandling(exceptionConfig -> exceptionConfig.accessDeniedHandler(accessDeniedHandler))
 			.build();
@@ -72,8 +81,7 @@ public class HttpSecurityConfig { // esta es una cadena de filtros
 		// == aseguracion basada en coincidencias de url
 		
 		/*autorizacion paa endpoints de productos  */
-		authReqConfig.requestMatchers(HttpMethod.GET, "/products")
-		.hasAnyRole(RoleEnum.ADMIN.name(), RoleEnum.ASSISTANT_ADIM.name());
+		authReqConfig.requestMatchers(HttpMethod.GET, "/products").hasAnyRole(RoleEnum.ADMIN.name(), RoleEnum.ASSISTANT_ADIM.name());
 		// .hasAnyAuthority(RolPermission.READ_ALL_PRODUCTS.name());
 		authReqConfig.requestMatchers(HttpMethod.GET, "/products/{productId}")
 		.hasAnyRole(RoleEnum.ADMIN.name(), RoleEnum.ASSISTANT_ADIM.name());

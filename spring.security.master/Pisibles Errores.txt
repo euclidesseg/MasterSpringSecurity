@@ -1,0 +1,3 @@
+... Error 1 Comun 
+*** fetch = FetchType.EAGER
+### Asegirarmps de qie em una relacion OneToMany esta especificado de esta manera para hacer una carga total de todo la entidad 

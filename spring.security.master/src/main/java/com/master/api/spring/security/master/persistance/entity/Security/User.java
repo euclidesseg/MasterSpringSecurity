@@ -119,3 +119,9 @@ public class User implements UserDetails {
 //#   indicar que la colección puede contener objetos de cualquier tipo que extienda 
 //#   (o implemente) la interfaz GrantedAuthority. La ? es un comodín que representa un tipo desconocido,
 //... y extends GrantedAuthority indica que el tipo desconocido debe ser una subclase (o implementación) de GrantedAuthority.
+
+//Nota:
+// cuando deseas realizar operaciones de mapeo, filtrado o reducción sobre una colección en Java, 
+// debes convertir esa colección en un Stream antes de aplicar estas operaciones.
+// Los métodos map, filter, reduce y otros similares son parte del API de Streams y no están disponiblesdirectamente en las colecciones como List.
+// con map puedes tambien retornar igual que en angular

@@ -12,7 +12,7 @@ import com.master.api.spring.security.master.exception.ObjectNotFoundException;
 import com.master.api.spring.security.master.interfaces.IUserService;
 import com.master.api.spring.security.master.persistance.entity.Security.Role;
 import com.master.api.spring.security.master.persistance.entity.Security.User;
-import com.master.api.spring.security.master.persistance.repository.IUserRepository;
+import com.master.api.spring.security.master.persistance.repository.security.IUserRepository;
 
 @Service
 public class UserService implements IUserService {
@@ -40,7 +40,7 @@ public class UserService implements IUserService {
 
 
 
-        Role roleDefault = roleService.findDefaultRole().orElseThrow(() -> new ObjectNotFoundException("Role Not found whit Eole"));
+        Role roleDefault = roleService.findDefaultRole().orElseThrow(() -> new ObjectNotFoundException("Role Not found whit"));
         user.setRole(roleDefault);
         user.setEnabled(true);
         // if (newUser.getPassword().equals("marianito")) {

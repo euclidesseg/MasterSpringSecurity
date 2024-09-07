@@ -1,4 +1,4 @@
-package com.master.api.spring.security.master.persistance.repository;
+package com.master.api.spring.security.master.persistance.repository.security;
 
 
 import java.util.Optional;

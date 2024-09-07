@@ -2,6 +2,7 @@ package com.master.api.spring.security.master.services.Auth;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -10,15 +11,19 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 
 import com.master.api.spring.security.master.dto.RegisteredUser;
 import com.master.api.spring.security.master.dto.SaveUser;
 import com.master.api.spring.security.master.dto.auth.AuthenticationRequest;
 import com.master.api.spring.security.master.dto.auth.AuthenticationResponse;
 import com.master.api.spring.security.master.exception.ObjectNotFoundException;
+import com.master.api.spring.security.master.persistance.entity.Security.JwtToken;
 import com.master.api.spring.security.master.persistance.entity.Security.User;
+import com.master.api.spring.security.master.persistance.repository.security.IJwtTokenRespository;
 import com.master.api.spring.security.master.services.UserService;
 
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 
 @Service
@@ -28,19 +33,21 @@ public class AuthenticationService {
     @Autowired
     private JwtService jwtService;
     @Autowired
-    AuthenticationManager authenticationManager;
+    private AuthenticationManager authenticationManager;
+    @Autowired
+    private IJwtTokenRespository jwtRepository;
 
     public RegisteredUser registerOneCustomer(@Valid SaveUser newUser) {
         User user = this.userService.createOneCustomer(newUser);
+        String jwt = jwtService.generateToken(user, generateExtraClaims(user));
 
+        saveUserToken(jwt, user);
+        
         RegisteredUser registerdUserDto = new RegisteredUser();
-
         registerdUserDto.setId(user.getId());
         registerdUserDto.setName(user.getName());
         registerdUserDto.setUsername(user.getUsername());
         registerdUserDto.setRole(user.getRole().getName());
-
-        String jwt = jwtService.generateToken(user, generateExtraClaims(user));
         registerdUserDto.setJwt(jwt);
         return registerdUserDto;
     }
@@ -52,13 +59,28 @@ public class AuthenticationService {
 
         Authentication authentication = new UsernamePasswordAuthenticationToken( authRequest.getUsername(), authRequest.getPassword());
 
+        //authentication es una implementacion de UsernamePasswordAuthenticationToken que se necesita para enviarcela al metodo authenticate aqui se aplica polimorfismo que dice
+        // que una clase padre puede implementar de a cualquiera de sus hijas
+        
         this.authenticationManager.authenticate(authentication);//... se hace una validación 
-
-        UserDetails user = this.userService.findOneByUsername(authRequest.getUsername()).get();
+        UserDetails user = this.userService.findOneByUsername(authRequest.getUsername()).get(); // obtener los detalles del usuario
         String jwt = this.jwtService.generateToken(user, generateExtraClaims((User)user)); //...aplicando casteo ya que es lo mismo porque user implementa UserDetails
+        saveUserToken(jwt, user);
         AuthenticationResponse authResp = new AuthenticationResponse();
         authResp.setJwt(jwt);
         return authResp;
+    }
+
+
+
+    //==Metodo para crear un token en base de datos usado al momento de login y de creación de un usuario;
+    private void saveUserToken(String jwt, UserDetails user) {
+        JwtToken token = new JwtToken();
+        token.setToken(jwt);
+        token.setUser((User) user);
+        token.setExpiration(this.jwtService.extractExpiration(jwt));
+        token.setValid(true);
+        this.jwtRepository.save(token);
     }
 
     // ... Metodo para generar los Claims con el que se genera el tocken
@@ -113,6 +135,17 @@ public class AuthenticationService {
                 }
         }
         return null;
+    }
+
+    public void logout(HttpServletRequest request) {
+        String jwt = this.jwtService.extractJwtFromRequest(request);
+        if(jwt == null || !StringUtils.hasText(jwt)) return;
+
+        Optional<JwtToken> token = jwtRepository.findByToken(jwt); // buscar el token en db para invalidarlo con invalid false.
+        if(token.isPresent() && token.get().isValid()){
+            token.get().setValid(false);
+            jwtRepository.save(token.get());
+        }
     }
 }
 

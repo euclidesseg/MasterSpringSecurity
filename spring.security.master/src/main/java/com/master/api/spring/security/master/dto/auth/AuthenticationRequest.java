@@ -18,6 +18,5 @@ public class AuthenticationRequest implements Serializable{
     public void setPassword(String passoword) {
         this.password = passoword;
     }
-    
 
 }

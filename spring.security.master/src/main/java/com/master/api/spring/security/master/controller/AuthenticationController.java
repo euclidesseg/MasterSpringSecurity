@@ -9,11 +9,13 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.master.api.spring.security.master.dto.LogoutResponse;
 import com.master.api.spring.security.master.dto.auth.AuthenticationRequest;
 import com.master.api.spring.security.master.dto.auth.AuthenticationResponse;
 import com.master.api.spring.security.master.persistance.entity.Security.User;
 import com.master.api.spring.security.master.services.Auth.AuthenticationService;
 
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -54,5 +56,13 @@ public class AuthenticationController {
         User myUser = this.authenticationService.getLoggedInUser();
         return ResponseEntity.status(HttpStatus.OK).body(myUser);
     }
+
+    @PostMapping("/logout")
+    public ResponseEntity<LogoutResponse> response(HttpServletRequest httpServletRequest) {
+     this.authenticationService.logout(httpServletRequest);
+     return ResponseEntity.ok(new LogoutResponse("Logout exitoso"));
+
+    }
+    
 }
  

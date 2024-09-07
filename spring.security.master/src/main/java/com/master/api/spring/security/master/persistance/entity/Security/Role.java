@@ -3,8 +3,11 @@ package com.master.api.spring.security.master.persistance.entity.Security;
 
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -12,7 +15,7 @@ import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 
 @Entity
-@Table(name = "rol")
+@Table(name = "role")
 public class Role {
     
     @Id
@@ -21,7 +24,9 @@ public class Role {
     private Long id;
     private String name;
 
-    @OneToMany(mappedBy = "role") // relacion uno a muchos lo que indica que un rol va a tener muchos permisos asociados 
+    @JsonIgnore
+    @OneToMany(mappedBy = "role", fetch = FetchType.EAGER) // relacion uno a muchos lo que indica que un rol va a tener muchos permisos asociados 
+    //fetch = FetchType.EAGER hará que me traiga todo incluso los grndtedPermissions
     private List<GrantedPermission> permissions;
 
 

@@ -6,7 +6,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.stereotype.Service;
 
 import com.master.api.spring.security.master.exception.ObjectNotFoundException;
-import com.master.api.spring.security.master.persistance.repository.IUserRepository;
+import com.master.api.spring.security.master.persistance.repository.security.IUserRepository;
 
 @Service
 public class UserDetailService implements UserDetailsService {

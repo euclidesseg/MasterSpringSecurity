@@ -1,4 +1,4 @@
-package com.master.api.spring.security.master.persistance.repository;
+package com.master.api.spring.security.master.persistance.repository.security;
 
 import java.util.Optional;
 
@@ -9,5 +9,5 @@ import com.master.api.spring.security.master.persistance.entity.Security.Role;
 
 @Repository
 public interface IRoleRepository extends JpaRepository <Role, Long> {
-    Optional<Role> finByName(String nameRole);
+    Optional<Role> findByName(String name);
 }

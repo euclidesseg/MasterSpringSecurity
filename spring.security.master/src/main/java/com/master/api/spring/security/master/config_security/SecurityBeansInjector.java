@@ -40,7 +40,7 @@ public class SecurityBeansInjector {
     public PasswordEncoder passwordEncoder (){
         return new BCryptPasswordEncoder();
     }
-
+    
     @Bean
     public UserDetailsService userDetailsService(){
         return (username) ->{
@@ -69,3 +69,6 @@ public class SecurityBeansInjector {
 // ## Los beans se pueden configurar declarativamente mediante 
 // ## anotaciones (@Component, @Service, @Repository, @Controller, etc.) o mediante XML (en versiones antiguas de Spring). 
 // ## Esto permite una configuración más flexible y fácil de entender.
+
+// !Nota: 
+// === Debo crear el securityconfig y jwtAuthenticationfilter antes de la creación de usuarios

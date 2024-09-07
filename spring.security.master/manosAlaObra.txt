@@ -1,6 +1,7 @@
 
 la Authenticacion = Quien soy 
 la Authorizacion = A que tengo permisos
+Enlace para ver documentacion https://docs.spring.io/spring-security/reference/servlet/architecture.html
 
 //# Metodo autoregistro de usuaio y generar el token
 == Cuando un usuario realiza un registro nuevo usualmente se redirige a pantalla principal despeus de completar el registro  

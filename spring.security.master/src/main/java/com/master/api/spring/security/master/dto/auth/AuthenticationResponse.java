@@ -13,6 +13,4 @@ public class AuthenticationResponse implements Serializable{
         this.jwt = jwt;
     }
 
- 
-
 }

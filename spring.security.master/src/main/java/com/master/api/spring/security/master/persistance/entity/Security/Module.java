@@ -12,30 +12,30 @@ public class Module {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
-    private String module;  //PRODUCT, CATEGORY, AUTH,
-    private String pathBase;
-
-
-
-    //=== getter and setters
+    
+    private String name;  //PRODUCT, CATEGORY, AUTH,
+    private String base_path;
+    
+    
+    
+    //=== getter and setters    
     public Long getId() {
         return id;
     }
     public void setId(Long id) {
         this.id = id;
     }
-    public String getModule() {
-        return module;
+    public String getName() {
+        return name;
     }
-    public void setModule(String module) {
-        this.module = module;
+    public void setName(String name) {
+        this.name = name;
     }
-    public String getPathBase() {
-        return pathBase;
+    public String getBase_path() {
+        return base_path;
     }
-    public void setPathBase(String pathBase) {
-        this.pathBase = pathBase;
+    public void setBase_path(String base_path) {
+        this.base_path = base_path;
     }
     
     // las patbase son como @RequestMapping("/products")

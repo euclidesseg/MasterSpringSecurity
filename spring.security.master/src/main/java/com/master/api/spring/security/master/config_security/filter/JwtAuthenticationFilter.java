@@ -1,19 +1,23 @@
 package com.master.api.spring.security.master.config_security.filter;
 
 import java.io.IOException;
+import java.sql.Date;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.WebAuthenticationDetails;
 import org.springframework.stereotype.Component;
-import org.springframework.util.StringUtils;
 import org.springframework.web.filter.OncePerRequestFilter;
 
+import com.master.api.spring.security.master.persistance.entity.Security.JwtToken;
 import com.master.api.spring.security.master.persistance.entity.Security.User;
+import com.master.api.spring.security.master.persistance.repository.security.IJwtTokenRespository;
 import com.master.api.spring.security.master.services.UserDetailService;
 import com.master.api.spring.security.master.services.UserService;
 import com.master.api.spring.security.master.services.Auth.JwtService;
+import org.springframework.util.StringUtils;
 
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
@@ -29,26 +33,32 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     UserDetailService userDetailService;
     @Autowired
     UserService userService;
+    @Autowired
+    private IJwtTokenRespository jwtTokenRespository;
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException{
-        System.out.println("Entró en filtro Jwt Authentication Filter");
-        
-      //1. Obtener encabezado(header) http llamado autorization
-      //   Se verifica si el encabezado Authorization existe y comienza con "Bearer ". 
-      //   Si no es así, la cadena de filtros continúa sin procesar el token JWT.
-        String autorizationHeader =  request.getHeader("Authorization"); //Bearer jwt
-        if(!StringUtils.hasText(autorizationHeader) || !autorizationHeader.startsWith("Bearer ")){ // == Verificar si el token de autorización existe y comienza con "Bearer "
-            filterChain.doFilter(request, response);
-            return; // retorna el control a quien mando a llamar doFilterInternal
-        }
-      //2. Desde el encabezado(Header) sacar el token
-        String jwt = autorizationHeader.split(" ")[1];
+      System.out.println("Entró en filtro Jwt Authentication Filter");
+      String jwt = this.jwtService.extractJwtFromRequest(request); // ver en este metodo los pasos 1 y 2 para Obtener authorization header y  Obtener token
+      //3. validar que el jwt si este valido y que este metodo no me retoene null
+      if(jwt == null || !StringUtils.hasText(jwt)){
+        filterChain.doFilter(request, response);
+        return;
+      }
+      //3.1 obtener el token no expirado y valido desde base de datos
 
-      //3. Obtener el subject/username desde el token
+      Optional<JwtToken> token = this.jwtTokenRespository.findByToken(jwt);
+      boolean isValid = validateToken(token);
+      if(!isValid){
+        filterChain.doFilter(request, response);
+        return;
+      }
+
+      //4. Obtener el subject/username desde el token
       // Esta accion a su vez valida el formato del token firma y fecha de expiración
-        String username = jwtService.extractUsername(jwt);
-
-      //4. Setear el objeto authentication dentro de securit cotnext Holder
+      String username = jwtService.extractUsername(jwt); // cuando el token llegue aqui siempre será valido ya que ha pasado los dos if anteriores
+      
+      
+      //5. Setear el objeto authentication dentro de securit cotnext Holder
       // Este objeto representa el usuario logueado esta dentro del securityContext y este a su vez dentro del securitycontext holder
         User userDetails = this.userService.findOneByUsername(username).get();
         UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(username, null, userDetails.getAuthorities());
@@ -56,8 +66,28 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         SecurityContextHolder.getContext().setAuthentication(authToken);
 
 
-      //5. Ejecutar el registro de filtros
+      //6. Ejecutar el registro de filtros
       filterChain.doFilter(request, response);
+    }
+
+    //metodo para validar el token que viene de base de datos
+    private boolean validateToken(Optional<JwtToken> optionalToken) {
+      if(!optionalToken.isPresent()){
+        System.out.println("Token no existente");
+        return false;
+      }
+      JwtToken token = optionalToken.get();
+      Date now = new Date(System.currentTimeMillis());
+      boolean isValid = token.isValid() && token.getExpiration().after(now); // si la fecha de expiración esta despues de la fecha actual
+      if(!isValid){
+        System.out.println("Token no valido");
+        updateTokenStatus(token);
+      }
+      return isValid;
+    }
+    private void updateTokenStatus(JwtToken token) {
+      token.setValid(false);
+      this.jwtTokenRespository.save(token);
     }
     
 }
