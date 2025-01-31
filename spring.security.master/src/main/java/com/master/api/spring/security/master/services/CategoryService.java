@@ -17,7 +17,7 @@ import com.master.api.spring.security.master.persistance.repository.IcategoryRep
 public class CategoryService implements ICategoryService {
 
     @Autowired
-    IcategoryRepository categoryRepository;
+    private IcategoryRepository categoryRepository;
 
     @Override
     public Page<Category> findAll(Pageable pageable) {

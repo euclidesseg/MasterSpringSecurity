@@ -31,7 +31,7 @@ public class SecurityBeansInjector {
     // == Estrategia de authenticacion
     public AuthenticationProvider authenticationProvider(){
         DaoAuthenticationProvider authenticationStrategy = new DaoAuthenticationProvider(); // == necesit aun pasword encoder porque las contraseñas estarán encriptadas
-        authenticationStrategy.setPasswordEncoder(passwordEncoder());
+        authenticationStrategy.setPasswordEncoder(passwordEncoder()); // necesita un codificador de conrtaseñas para comparar cuando se inicia sicion
         authenticationStrategy.setUserDetailsService(userDetailsService());
         return authenticationStrategy;
     }

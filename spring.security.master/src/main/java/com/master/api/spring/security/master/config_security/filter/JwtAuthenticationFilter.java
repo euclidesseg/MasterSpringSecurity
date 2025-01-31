@@ -19,7 +19,7 @@ import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-
+// este es un filtro de seguridad llamado filtro de authenticacion que se injecta a mi cadena de filtros la cual se genera en HttpSecurityConfig
 @Component
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
 

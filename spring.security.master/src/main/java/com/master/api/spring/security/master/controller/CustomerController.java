@@ -43,3 +43,8 @@ public class CustomerController {
         return ResponseEntity.ok(Arrays.asList());
     }
 }
+
+// RegisterUser DTO que devuelve para mostrar al usuario
+// SaveUser DTO que recibe para guardar un usuario
+
+//**Nota: JPA Nunca devuelve un null o vacio */

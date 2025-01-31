@@ -50,7 +50,7 @@ public class HttpSecurityConfig { // esta es una cadena de filtros
 	
     //== este metodo permite personalizar  como se van a gestionar y proteger las solicitudes http
 	@Bean
-	public SecurityFilterChain filterChain(HttpSecurity http, AuthenticationManagerBuilder auth) throws Exception { 
+	public SecurityFilterChain filterChain(HttpSecurity http, AuthenticationManagerBuilder auth) throws Exception { // esta es una cadena de filtros
 		SecurityFilterChain filterChain = http
 			.csrf(csrsConfig -> csrsConfig.disable()) // desactiva crsf (crsf) deshabilitamos este tipo de proteccion
 			.cors(corsConfig -> corsConfig.disable()) // desactiva cors para 
@@ -59,7 +59,9 @@ public class HttpSecurityConfig { // esta es una cadena de filtros
 			//== se encarga de inyectar los beans necesarios automáticamente. Al referenciar authenticationProvider(this.authenticationProvider),
 			//== Spring Security buscará un bean de tipo AuthenticationProvider en el contexto de la aplicación y lo utilizará para la autenticación
 			.addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
-			.authorizeHttpRequests(authReqConfig -> buildRequestMatchers(authReqConfig))
+			.authorizeHttpRequests(authReqConfig -> {
+				authReqConfig.anyRequest().permitAll();
+			})
 			.exceptionHandling(exceptionConfig -> exceptionConfig.authenticationEntryPoint(authenticationEntryPoint))
 			.exceptionHandling(exceptionConfig -> exceptionConfig.accessDeniedHandler(accessDeniedHandler))
 			.build();

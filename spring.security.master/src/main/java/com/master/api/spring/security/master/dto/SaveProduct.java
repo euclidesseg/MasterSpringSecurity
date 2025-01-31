@@ -7,7 +7,7 @@ import jakarta.validation.constraints.DecimalMin;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
 
-public class SaveProduct implements Serializable{
+public class SaveProduct implements Serializable{ // Serializable se usa ya que estos datos van a viajar a traves del protocolo http
 
     @NotBlank(message = "El nombre no deve estar vacio")
     private String nombre;

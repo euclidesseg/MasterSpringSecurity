@@ -31,16 +31,16 @@ public class AuthenticationService {
     AuthenticationManager authenticationManager;
 
     public RegisteredUser registerOneCustomer(@Valid SaveUser newUser) {
-        User user = this.userService.createOneCustomer(newUser);
+        User userSaved = this.userService.createOneCustomer(newUser);
 
         RegisteredUser registerdUserDto = new RegisteredUser();
 
-        registerdUserDto.setId(user.getId());
-        registerdUserDto.setName(user.getName());
-        registerdUserDto.setUsername(user.getUsername());
-        registerdUserDto.setRole(user.getRole().name());
+        registerdUserDto.setId(userSaved.getId());
+        registerdUserDto.setName(userSaved.getName());
+        registerdUserDto.setUsername(userSaved.getUsername());
+        registerdUserDto.setRole(userSaved.getRole().name()); //.name() para que me de el nombre de la enumeración.
 
-        String jwt = jwtService.generateToken(user, generateExtraClaims(user));
+        String jwt = jwtService.generateToken(userSaved, generateExtraClaims(userSaved));
         registerdUserDto.setJwt(jwt);
         return registerdUserDto;
     }

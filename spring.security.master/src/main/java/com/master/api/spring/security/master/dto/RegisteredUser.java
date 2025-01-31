@@ -41,3 +41,10 @@ public class RegisteredUser implements Serializable {
         this.jwt = jwt;
     }
 }
+
+
+//** Nota:
+//!! En Java, las clases de tipo Entidad suelen implementar la interfaz 
+//!! Serializable para permitir que sus objetos puedan ser serializados y deserializados. 
+//!! La serialización es el proceso de convertir un objeto en un flujo de bytes para que pueda ser almacenado o transmitido,
+//!! y la deserialización es el proceso inverso, en el cual se reconstruye el objeto original a partir de esos bytes.

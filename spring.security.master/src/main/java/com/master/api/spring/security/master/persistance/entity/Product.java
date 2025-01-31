@@ -26,7 +26,7 @@ public class Product {
     private String name;
     private BigDecimal price;
 
-    @Enumerated(EnumType.STRING) // para guardar un valor de string en vez de el valor numerico original
+    @Enumerated(EnumType.STRING) // para guardar un valor de string en vez de el valor numerico ordinal
     private ProductStatus status;
 
 

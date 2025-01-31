@@ -27,6 +27,7 @@ public class ProductController {
     // @PreAuthorize("hasAnyRole('ADMIN', 'ASSISTANT_ADIM')") // basado en roles
     // @PreAuthorize("hasAuthority('READ_ALL_PRODUCTS')") // basado en authorities
     @GetMapping
+    // las paginas empiezan desde 0 y el tamaño de la página el que quereamos
     //#  pageable contiene el número de la pagina que deseo devolver y el tamaño de la pagina es decir el numero de registros
     //**   http://localhost:4001/api/v1/products?page=0&size=5   asi seria la url para indicar el numero de la página y el tamaño de la pagina
     //...  https://docs.spring.io/spring-boot/docs/current/reference/html/application-properties.html  Documentacion de como y donde cambiar los valores de los parametros por fefecto
@@ -42,7 +43,7 @@ public class ProductController {
     }
    
     // @PreAuthorize("hasAnyRole('ADMIN', 'ASSISTANT_ADIM')") // basado en roles
-    @PreAuthorize("hasAuthority('READ_ONE_PRODUCT')") // basado en authorities
+    //@PreAuthorize("hasAuthority('READ_ONE_PRODUCT')") // basado en authorities
     @GetMapping("/{productId}")
     public ResponseEntity<Product> findOneById(@PathVariable Long productId){ 
         Optional<Product> product = productService.findOneById(productId);
